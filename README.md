@@ -1,32 +1,23 @@
 # DeeJay
 
-MIDI handling utilities for routing deck controls, mixer changes, and sampler pads.
+An Electron + TypeScript shell for a dual-deck DJ interface with lock-free parameter queues and placeholder native engine bindings.
 
 ## Features
+- Library browser that exposes track metadata and lets you load decks via click (Deck A) or context menu (Deck B).
+- Dual decks with waveform displays rendered from cached data, plus tempo and pitch sliders.
+- Crossfader, sampler pads, and recorder toggle wired to lock-free parameter queues for the native engine bindings.
 
-- Realtime MIDI router that runs on its own thread and dispatches to a `TransportController` interface.
-- Learn mode that listens for the next MIDI CC/note and binds it to the requested action.
-- SQLite-backed mapping store so learned bindings persist between sessions.
+## Development
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
+2. Build and launch Electron:
+   ```bash
+   npm start
+   ```
 
-## Usage
-
-```python
-from deejay.midi import MidiAction, MidiLearner, MidiMappingStore, MidiMessage, MidiRouter
-from deejay.transport import TransportController
-
-# Implement the controller to drive your deck engine
-class Engine(TransportController):
-    ...
-
-store = MidiMappingStore("~/deejay/mappings.db")
-controller = Engine()
-router = MidiRouter(controller, store)
-router.start()
-
-# Learn mode example
-router.learner.start_binding(MidiAction.PLAY_DECK_A)
-router.enqueue(MidiMessage("note_on", channel=1, control=24, value=100))
-```
+The UI loads pre-generated waveform caches and routes UI events to `SharedArrayBuffer`-backed parameter queues so the audio engine can poll without locks.
 Cross-platform helper for configuring device and buffer defaults with crash reporting, asset bundling, and simple versioning hooks.
 
 ## Features
