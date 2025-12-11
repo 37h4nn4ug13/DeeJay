@@ -1,41 +1,26 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.16)
+project(DeeJay LANGUAGES CXX)
 
-project(DeeJayAudio LANGUAGES CXX)
+option(DEEJAY_ENABLE_RUBBERBAND "Enable Rubber Band Library integration" ON)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
 
-option(DEEJAY_USE_SYSTEM_PORTAUDIO "Link against a system PortAudio install" OFF)
-
-if(DEEJAY_USE_SYSTEM_PORTAUDIO)
-    find_package(PkgConfig REQUIRED)
-    pkg_check_modules(PORTAUDIO REQUIRED portaudio-2.0)
-    add_library(portaudio INTERFACE)
-    target_include_directories(portaudio INTERFACE ${PORTAUDIO_INCLUDE_DIRS})
-    target_link_libraries(portaudio INTERFACE ${PORTAUDIO_LIBRARIES})
-else()
-    include(FetchContent)
-
-    set(PORTAUDIO_TAG v19.7.0)
-    FetchContent_Declare(
-        portaudio
-        URL https://github.com/PortAudio/portaudio/archive/refs/tags/${PORTAUDIO_TAG}.tar.gz
-    )
-
-    FetchContent_MakeAvailable(portaudio)
-endif()
-
-add_executable(deejay_audio
-    src/main.cpp
+add_library(deejay_audio STATIC
+    src/TimeStretchPitchProcessor.cpp
+    src/LatencyCompensatedProcessor.cpp
 )
 
-target_link_libraries(deejay_audio PRIVATE portaudio)
+target_include_directories(deejay_audio PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-target_compile_features(deejay_audio PRIVATE cxx_std_17)
-
-include(CTest)
-
-if(BUILD_TESTING)
-    add_test(NAME deejay_audio_smoke COMMAND deejay_audio --duration-seconds 0)
+if (DEEJAY_ENABLE_RUBBERBAND)
+    find_package(RubberBand QUIET)
+    if (RubberBand_FOUND)
+        target_link_libraries(deejay_audio PUBLIC RubberBand::rubberband)
+        target_compile_definitions(deejay_audio PUBLIC DEEJAY_HAVE_RUBBERBAND=1)
+        message(STATUS "Building with Rubber Band Library support")
+    else()
+        message(WARNING "Rubber Band Library not found; building with stub implementation")
+    endif()
 endif()
+
