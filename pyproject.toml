@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "deejay"
+version = "0.1.0"
+description = "Master mix recorder with quick-save metadata."
+readme = "README.md"
+authors = [{name = "DeeJay"}]
+requires-python = ">=3.11"
+dependencies = ["numpy", "sounddevice", "soundfile"]
+
+[project.scripts]
+deejay-cli = "deejay.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
