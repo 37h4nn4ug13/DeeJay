@@ -1,1 +1,10 @@
-/target
+__pycache__/
+*.pyc
+.env
+.venv
+recordings/
+data/
+.DS_Store
+node_modules
+/dist
+npm-debug.log
