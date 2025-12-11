@@ -1,23 +1,12 @@
+"""DeeJay library and CLI utilities."""
 """Foundational DJ components: decks, master clock, and DSP stubs."""
 
 from .clock import MasterClock
 from .deck import Deck, TransportState
 from . import dsp
-
-__all__ = ["MasterClock", "Deck", "TransportState", "dsp"]
-"""DeeJay background audio analysis helpers."""
-
 from .analysis import BackgroundAnalyzer, AnalysisResult
 from .audio import AudioEngine
 from .database import AnalysisDatabase
-
-__all__ = [
-    "BackgroundAnalyzer",
-    "AnalysisResult",
-    "AudioEngine",
-    "AnalysisDatabase",
-"""Realtime MIDI handling and mapping utilities for DeeJay."""
-
 from .midi import (
     MidiAction,
     MidiMessage,
@@ -28,7 +17,12 @@ from .midi import (
 )
 from .transport import TransportController
 
-__all__ = [
+
+__all__ = ["MasterClock", "Deck", "TransportState", "dsp",
+    "BackgroundAnalyzer",
+    "AnalysisResult",
+    "AudioEngine",
+    "AnalysisDatabase",
     "MidiAction",
     "MidiMessage",
     "MidiMapping",
