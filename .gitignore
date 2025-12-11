@@ -1,3 +1,5 @@
-__pycache__/
-*.pyc
-*.pyo
+target/
+dist/
+crash.log
+settings.json
+**/*.DS_Store
