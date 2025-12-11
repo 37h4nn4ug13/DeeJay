@@ -1,13 +1,11 @@
+from __future__ import annotations
+
 import dataclasses
 import datetime as dt
 import sqlite3
 import uuid
-from typing import List, Optional, Sequence
-from __future__ import annotations
-
-import sqlite3
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Dict, List, Optional, Sequence
 
 _DB_ISO_FORMAT = "%Y-%m-%dT%H:%M:%S"
 
